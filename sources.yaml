@@ -1,11 +1,11 @@
-# BEIREK Content Scout - News Sources (RSS Only)
-# ===============================================
-# 65+ RSS feeds for renewable energy, infrastructure, and project finance news
-# Last updated: 2026-01-31 - Cleaned up (RSS only, no scraping)
+# BEIREK Content Scout - News Sources (Verified RSS)
+# ===================================================
+# Only verified working RSS feeds
+# Last updated: 2026-01-31
 
 sources:
   # ===========================================================================
-  # PRIMARY SOURCES (Priority 1) - High quality, industry-specific
+  # PRIMARY SOURCES - High quality, verified working
   # ===========================================================================
   primary:
     # --- Solar Energy ---
@@ -27,34 +27,10 @@ sources:
       category: "solar"
       priority: 1
 
-    - name: "Solar Industry Magazine"
-      url: "https://solarindustrymag.com"
-      rss_url: "https://solarindustrymag.com/feed/"
-      category: "solar"
-      priority: 1
-
-    - name: "Solar Daily"
-      url: "https://www.solardaily.com"
-      rss_url: "https://www.solardaily.com/rss/solar.xml"
-      category: "solar"
-      priority: 1
-
-    - name: "SolarPACES"
-      url: "https://www.solarpaces.org"
-      rss_url: "https://www.solarpaces.org/feed/"
-      category: "solar"
-      priority: 1
-
     # --- Wind Energy ---
-    - name: "Wind Power Monthly"
+    - name: "Windpower Monthly"
       url: "https://www.windpowermonthly.com"
       rss_url: "https://www.windpowermonthly.com/rss"
-      category: "wind"
-      priority: 1
-
-    - name: "Windpower Engineering"
-      url: "https://www.windpowerengineering.com"
-      rss_url: "https://www.windpowerengineering.com/feed/"
       category: "wind"
       priority: 1
 
@@ -64,34 +40,10 @@ sources:
       category: "wind"
       priority: 1
 
-    - name: "North American Windpower"
-      url: "https://nawindpower.com"
-      rss_url: "https://nawindpower.com/feed/"
-      category: "wind"
-      priority: 1
-
-    - name: "National Wind Watch"
-      url: "https://www.wind-watch.org"
-      rss_url: "https://www.wind-watch.org/feed/"
-      category: "wind"
-      priority: 1
-
-    - name: "WWEA"
-      url: "https://wwindea.org"
-      rss_url: "https://wwindea.org/feed/"
-      category: "wind"
-      priority: 1
-
     # --- Energy Storage ---
     - name: "Energy Storage News"
       url: "https://www.energy-storage.news"
       rss_url: "https://www.energy-storage.news/feed/"
-      category: "storage"
-      priority: 1
-
-    - name: "Energy Storage Journal"
-      url: "https://www.energystoragejournal.com"
-      rss_url: "https://www.energystoragejournal.com/feed/"
       category: "storage"
       priority: 1
 
@@ -108,130 +60,43 @@ sources:
       category: "energy"
       priority: 1
 
-    - name: "Clean Energy Wire"
-      url: "https://www.cleanenergywire.org"
-      rss_url: "https://www.cleanenergywire.org/rss.xml"
-      category: "energy"
-      priority: 1
-
-    - name: "Greentech Media"
-      url: "https://www.greentechmedia.com"
-      rss_url: "https://www.greentechmedia.com/feed/"
-      category: "energy"
-      priority: 1
-
-    - name: "Energy Monitor"
-      url: "https://www.energymonitor.ai"
-      rss_url: "https://www.energymonitor.ai/feed/"
-      category: "energy"
-      priority: 1
-
-    - name: "Recharge News"
-      url: "https://www.rechargenews.com"
-      rss_url: "https://www.rechargenews.com/rss"
-      category: "energy"
-      priority: 1
-
     - name: "CleanTechnica"
       url: "https://cleantechnica.com"
       rss_url: "https://cleantechnica.com/feed/"
       category: "energy"
       priority: 1
 
-    # --- Grid & Transmission ---
-    - name: "T&D World"
-      url: "https://www.tdworld.com"
-      rss_url: "https://www.tdworld.com/rss"
-      category: "grid"
+    - name: "Electrek"
+      url: "https://electrek.co"
+      rss_url: "https://electrek.co/feed/"
+      category: "energy"
       priority: 1
 
+    # --- Grid & Power ---
     - name: "Power Engineering"
       url: "https://www.power-eng.com"
       rss_url: "https://www.power-eng.com/feed/"
       category: "grid"
       priority: 1
 
+  # ===========================================================================
+  # SECONDARY SOURCES - Specialized topics
+  # ===========================================================================
+  secondary:
     # --- Project Finance ---
     - name: "Infrastructure Investor"
       url: "https://www.infrastructureinvestor.com"
       rss_url: "https://www.infrastructureinvestor.com/feed/"
       category: "finance"
-      priority: 1
+      priority: 2
 
-    - name: "Project Finance International"
-      url: "https://www.pfie.com"
-      rss_url: "https://www.pfie.com/rss"
+    - name: "Bloomberg NEF"
+      url: "https://about.bnef.com"
+      rss_url: "https://about.bnef.com/feed/"
       category: "finance"
-      priority: 1
-
-    - name: "IJGlobal"
-      url: "https://ijglobal.com"
-      rss_url: "https://www.ijglobal.com/rss"
-      category: "finance"
-      priority: 1
-
-    # --- Data Centers ---
-    - name: "Data Center Dynamics"
-      url: "https://www.datacenterdynamics.com"
-      rss_url: "https://www.datacenterdynamics.com/rss/"
-      category: "datacenter"
-      priority: 1
-
-    - name: "Data Center Knowledge"
-      url: "https://www.datacenterknowledge.com"
-      rss_url: "https://www.datacenterknowledge.com/rss.xml"
-      category: "datacenter"
-      priority: 1
-
-    - name: "Uptime Institute"
-      url: "https://journal.uptimeinstitute.com"
-      rss_url: "https://journal.uptimeinstitute.com/feed/"
-      category: "datacenter"
-      priority: 1
-
-  # ===========================================================================
-  # SECONDARY SOURCES (Priority 2) - Regional and specialized
-  # ===========================================================================
-  secondary:
-    # --- US Regional ---
-    - name: "Texas Tribune - Energy"
-      url: "https://www.texastribune.org/energy-environment/"
-      rss_url: "https://www.texastribune.org/feeds/articles/"
-      category: "regional"
-      priority: 2
-
-    - name: "Canary Media - Texas"
-      url: "https://www.canarymedia.com/regions/texas/"
-      rss_url: "https://www.canarymedia.com/regions/texas/feed/"
-      category: "regional"
-      priority: 2
-
-    - name: "Houston Chronicle - Energy"
-      url: "https://www.chron.com/business/energy/"
-      rss_url: "https://www.chron.com/business/energy/feed/"
-      category: "regional"
-      priority: 2
-
-    # --- Policy & Regulation ---
-    - name: "E&E News"
-      url: "https://www.eenews.net"
-      rss_url: "https://www.eenews.net/rss/"
-      category: "policy"
-      priority: 2
-
-    - name: "Utility Week"
-      url: "https://utilityweek.co.uk"
-      rss_url: "https://utilityweek.co.uk/feed/"
-      category: "policy"
       priority: 2
 
     # --- Hydrogen ---
-    - name: "Hydrogen Insight"
-      url: "https://www.hydrogeninsight.com"
-      rss_url: "https://www.hydrogeninsight.com/rss"
-      category: "hydrogen"
-      priority: 2
-
     - name: "H2 View"
       url: "https://www.h2-view.com"
       rss_url: "https://www.h2-view.com/feed/"
@@ -244,164 +109,24 @@ sources:
       category: "hydrogen"
       priority: 2
 
-    # --- EPC & Construction ---
-    - name: "ENR (Engineering News-Record)"
-      url: "https://www.enr.com"
-      rss_url: "https://www.enr.com/rss"
-      category: "construction"
-      priority: 2
-
-    - name: "ENR Texas & Southeast"
-      url: "https://www.enr.com/topics/577-enr-texas-louisiana"
-      rss_url: "https://www.enr.com/rss/regions/texas-southeast"
-      category: "construction"
-      priority: 2
-
-    - name: "Construction Dive"
-      url: "https://www.constructiondive.com"
-      rss_url: "https://www.constructiondive.com/feeds/news/"
-      category: "construction"
-      priority: 2
-
-    - name: "Construction Today"
-      url: "https://www.construction-today.com"
-      rss_url: "https://www.construction-today.com/feed/"
-      category: "construction"
-      priority: 2
-
-    # --- Infrastructure ---
-    - name: "ReNew Canada"
-      url: "https://www.renewcanada.net"
-      rss_url: "https://www.renewcanada.net/feed/"
-      category: "infrastructure"
-      priority: 2
-
-    - name: "Informed Infrastructure"
-      url: "https://informedinfrastructure.com"
-      rss_url: "https://informedinfrastructure.com/feed/"
-      category: "infrastructure"
-      priority: 2
-
-    - name: "American Infrastructure Magazine"
-      url: "https://americaninfrastructuremag.com"
-      rss_url: "https://americaninfrastructuremag.com/feed/"
-      category: "infrastructure"
-      priority: 2
-
-    # --- Project Management ---
-    - name: "AACE International"
-      url: "https://source.aacei.org"
-      rss_url: "https://source.aacei.org/feed/"
-      category: "management"
-      priority: 2
-
-    # --- ESG & Sustainability ---
+    # --- ESG ---
     - name: "ESG Today"
       url: "https://www.esgtoday.com"
       rss_url: "https://www.esgtoday.com/feed/"
       category: "esg"
       priority: 2
 
-    - name: "Sustainable Brands"
-      url: "https://sustainablebrands.com"
-      rss_url: "https://sustainablebrands.com/rss"
-      category: "esg"
-      priority: 2
-
-    # --- International ---
-    - name: "PV Magazine Australia"
-      url: "https://www.pv-magazine-australia.com"
-      rss_url: "https://www.pv-magazine-australia.com/feed/"
-      category: "solar"
-      priority: 2
-
-    - name: "Solar Quotes Blog"
-      url: "https://www.solarquotes.com.au/blog"
-      rss_url: "https://www.solarquotes.com.au/blog/feed/"
-      category: "solar"
-      priority: 2
-
-    - name: "PV Magazine India"
-      url: "https://www.pv-magazine-india.com"
-      rss_url: "https://www.pv-magazine-india.com/feed/"
-      category: "solar"
-      priority: 2
-
-    # --- Latin America ---
-    - name: "Energía Estratégica"
-      url: "https://www.energiaestrategica.com"
-      rss_url: "https://www.energiaestrategica.com/feed/"
-      category: "regional"
+    # --- Construction ---
+    - name: "Construction Dive"
+      url: "https://www.constructiondive.com"
+      rss_url: "https://www.constructiondive.com/feeds/news/"
+      category: "construction"
       priority: 2
 
   # ===========================================================================
-  # TERTIARY SOURCES (Priority 3) - General news with energy coverage
+  # TERTIARY SOURCES - Backup
   # ===========================================================================
-  tertiary:
-    # --- Tech News ---
-    - name: "TechCrunch Green"
-      url: "https://techcrunch.com/tag/green/"
-      rss_url: "https://techcrunch.com/tag/green/feed/"
-      category: "technology"
-      priority: 3
-
-    - name: "Ars Technica"
-      url: "https://arstechnica.com/science/"
-      rss_url: "https://feeds.arstechnica.com/arstechnica/science"
-      category: "technology"
-      priority: 3
-
-    - name: "RealClearEnergy"
-      url: "https://www.realclearenergy.org"
-      rss_url: "https://www.realclearenergy.org/index.xml"
-      category: "energy"
-      priority: 3
-
-    # --- Nuclear Energy ---
-    - name: "World Nuclear News"
-      url: "https://www.world-nuclear-news.org"
-      rss_url: "https://www.world-nuclear-news.org/RSS/Latest-News"
-      category: "nuclear"
-      priority: 3
-
-    # --- Government ---
-    - name: "EIA - Today in Energy"
-      url: "https://www.eia.gov/todayinenergy/"
-      rss_url: "https://www.eia.gov/todayinenergy/rss/"
-      category: "government"
-      priority: 3
-
-    # --- Development Banks ---
-    - name: "World Bank News"
-      url: "https://www.worldbank.org/en/news"
-      rss_url: "https://worldbank.einnews.com/all_rss"
-      category: "development"
-      priority: 3
-
-    - name: "EBRD Publications"
-      url: "https://www.ebrd.com/news/publications.html"
-      rss_url: "https://www.ebrd.com/news/publications.rss"
-      category: "development"
-      priority: 3
-
-    - name: "BIS - All Categories"
-      url: "https://www.bis.org"
-      rss_url: "https://www.bis.org/doclist/rss_all_categories.rss"
-      category: "finance"
-      priority: 3
-
-    - name: "RENEW Wisconsin"
-      url: "https://www.renewwisconsin.org"
-      rss_url: "https://www.renewwisconsin.org/feed/"
-      category: "regional"
-      priority: 3
-
-    # --- Data Center ---
-    - name: "STACK Infrastructure"
-      url: "https://www.stackinfra.com/insights"
-      rss_url: "https://www.stackinfra.com/feed/"
-      category: "datacenter"
-      priority: 3
+  tertiary: []
 
 # Source categories
 categories:
@@ -410,16 +135,7 @@ categories:
   storage: "Energy storage (BESS)"
   grid: "Grid modernization and transmission"
   energy: "General renewable energy"
-  nuclear: "Nuclear energy"
   finance: "Project finance and investment"
-  policy: "Energy policy and regulation"
-  datacenter: "Data center infrastructure"
   hydrogen: "Hydrogen and green fuels"
   construction: "EPC and construction"
-  infrastructure: "Infrastructure projects and development"
-  management: "Project management"
   esg: "ESG and sustainability"
-  technology: "Energy technology"
-  regional: "Regional news"
-  government: "Government agencies"
-  development: "Development banks and institutions"
