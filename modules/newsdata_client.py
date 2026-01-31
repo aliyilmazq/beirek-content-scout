@@ -250,13 +250,14 @@ class NewsDataClient:
         """
         Fetch articles using a SINGLE API call to conserve credits.
 
-        Uses the 'energy' category which covers most BEIREK topics.
+        Searches for: energy, ebrd, epc, epc management, epcm
+        Returns max 10 results.
 
         Args:
             progress_callback: Optional callback(current, total)
 
         Returns:
-            List of unique article dicts
+            List of unique article dicts (max 10)
         """
         all_articles = []
         seen_urls = set(self._cache.get('seen_urls', []))
@@ -264,20 +265,38 @@ class NewsDataClient:
         if progress_callback:
             progress_callback(1, 1)
 
-        # SINGLE API call - use 'energy' category for broad coverage
-        articles = self.fetch_by_category('energy')
-        for article in articles:
-            if article['url'] not in seen_urls:
-                seen_urls.add(article['url'])
-                all_articles.append(article)
+        # SINGLE API call - combined keywords
+        # NewsData uses OR logic with space-separated terms
+        combined_query = "energy OR ebrd OR epc OR epcm OR infrastructure"
+
+        params = {
+            'q': combined_query,
+            'language': self.language,
+            'size': 10  # Only 10 results
+        }
+
+        if self.countries:
+            params['country'] = ','.join(self.countries)
+
+        try:
+            response = self._make_request('news', params)
+            articles = self._parse_response(response)
+
+            for article in articles:
+                if article['url'] not in seen_urls:
+                    seen_urls.add(article['url'])
+                    all_articles.append(article)
+
+        except NewsDataError as e:
+            logger.error(f"NewsData API error: {e}")
 
         # Update cache
         self._cache['seen_urls'] = list(seen_urls)[-1000:]
         self._cache['last_fetch'] = datetime.now().isoformat()
         self._save_cache()
 
-        logger.info(f"NewsData fetched {len(all_articles)} unique articles (1 API call)")
-        return all_articles
+        logger.info(f"NewsData fetched {len(all_articles)} articles (1 API call, max 10)")
+        return all_articles[:10]  # Ensure max 10
 
     def fetch_all_articles_full(self, progress_callback=None) -> List[Dict]:
         """

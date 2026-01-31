@@ -114,26 +114,7 @@ claude:
 newsdata:
   api_key: "pub_68078bc44c9c4c47b399bd75538b164c"
   base_url: "https://newsdata.io/api/1"
-  # Query categories (energy, business, technology, world)
-  categories:
-    - "energy"
-    - "business"
-    - "technology"
-  # Keywords for filtering
-  keywords:
-    - "renewable energy"
-    - "solar power"
-    - "wind energy"
-    - "energy storage"
-    - "battery storage"
-    - "grid infrastructure"
-    - "power plant"
-    - "project finance"
-    - "infrastructure investment"
-    - "data center"
-    - "EPC contract"
-    - "PPA"
-    - "green hydrogen"
+  # Combined query (single API call): energy OR ebrd OR epc OR epcm OR infrastructure
   # Language filter
   language: "en"
   # Countries (optional)
@@ -142,5 +123,5 @@ newsdata:
     - "gb"
     - "de"
     - "au"
-  # Results per query
-  max_results: 50
+  # Max results per query (conserve credits)
+  max_results: 10
