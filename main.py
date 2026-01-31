@@ -206,6 +206,7 @@ class ContentScout:
             return
 
         # Filter with Claude
+        relevant = []
         if result['new_articles'] > 0:
             self.ui.show_info("Makaleler filtreleniyor...")
 
@@ -231,7 +232,7 @@ class ContentScout:
         self.ui.show_summary({
             'Taranan Kaynak': result.get('sources_scanned', 0),
             'Yeni Makale': result['new_articles'],
-            'Ilgili Makale': len(relevant) if self.cli_available and result['new_articles'] > 0 else 0,
+            'Ilgili Makale': len(relevant),
             'Hatalar': len(result.get('errors', []))
         })
 
