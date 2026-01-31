@@ -2,16 +2,16 @@
 BEIREK Content Scout - Filter Module
 ====================================
 
-Claude CLI integration for article filtering and relevance scoring.
+Claude session integration for article filtering and relevance scoring.
 
 Features:
 - Batch article filtering
 - Relevance scoring (0-10)
 - BEIREK area assignment
 - JSON response parsing
+- Uses ClaudeSession for efficient API calls
 """
 
-import subprocess
 import json
 import re
 from pathlib import Path
@@ -23,6 +23,7 @@ from .storage import (
 )
 from .logger import get_logger
 from .config_manager import config, safe_json_parse
+from .claude_session import get_session, ClaudeSessionError
 
 # Module logger
 logger = get_logger(__name__)
@@ -40,11 +41,11 @@ class ClaudeCLIError(FilterError):
 
 class ArticleFilter:
     """
-    Article filter using Claude CLI.
+    Article filter using Claude session.
 
     Handles:
     - Preparing filter prompts
-    - Calling Claude CLI
+    - Calling Claude via session
     - Parsing responses
     - Updating article relevance
     """
@@ -66,8 +67,10 @@ class ArticleFilter:
         # Load filter prompt
         self.filter_prompt = self._load_prompt('filter_prompt.txt')
 
-        # Check Claude CLI availability
-        self._check_claude_cli()
+        # Get Claude session
+        self.session = get_session()
+        if not self.session.is_available():
+            raise ClaudeCLIError("Claude CLI not found. Please install it first.")
 
         logger.info(f"Filter initialized: min_score={self.min_score}, batch_size={self.batch_size}")
 
@@ -136,20 +139,6 @@ BEIREK ALANLARI:
 MAKALELER:
 """
 
-    def _check_claude_cli(self) -> bool:
-        """Check if Claude CLI is available."""
-        try:
-            result = subprocess.run(
-                ['claude', '--version'],
-                capture_output=True,
-                text=True,
-                timeout=10
-            )
-            return result.returncode == 0
-        except FileNotFoundError:
-            raise ClaudeCLIError("Claude CLI not found. Please install it first.")
-        except subprocess.TimeoutExpired:
-            raise ClaudeCLIError("Claude CLI check timed out.")
 
     def prepare_batch_prompt(self, articles: List[Dict]) -> str:
         """
@@ -181,7 +170,7 @@ MAKALELER:
 
     def call_claude_cli(self, prompt: str) -> str:
         """
-        Call Claude CLI with prompt.
+        Call Claude via session.
 
         Args:
             prompt: Prompt string
@@ -190,38 +179,11 @@ MAKALELER:
             Claude's response
         """
         try:
-            # Use subprocess to call Claude CLI
-            process = subprocess.Popen(
-                ['claude', '--print'],
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True
-            )
+            # Use session for efficient Claude calls
+            return self.session.query(prompt, include_system_prompt=False)
 
-            stdout, stderr = process.communicate(
-                input=prompt,
-                timeout=self.timeout
-            )
-
-            if process.returncode != 0:
-                raise ClaudeCLIError(f"Claude CLI error: {stderr}")
-
-            return stdout.strip()
-
-        except subprocess.TimeoutExpired:
-            process.kill()
-            logger.error(f"Claude CLI timeout after {self.timeout}s - content may be too large")
-            raise ClaudeCLIError(
-                f"Claude CLI timeout ({self.timeout}s asildi). "
-                "Icerik cok uzun olabilir veya Claude yavas yanit veriyor olabilir."
-            )
-        except FileNotFoundError:
-            raise ClaudeCLIError(
-                "Claude CLI bulunamadi! Lutfen kurun: https://claude.ai/cli"
-            )
-        except Exception as e:
-            logger.error(f"Claude CLI error: {e}")
+        except ClaudeSessionError as e:
+            logger.error(f"Claude session error: {e}")
             raise ClaudeCLIError(f"Claude CLI hatasi: {e}")
 
     def parse_filter_response(self, response: str, articles: List[Dict]) -> List[Dict]:

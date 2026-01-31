@@ -6,9 +6,10 @@ Content framing for BEIREK perspective.
 
 Takes filtered articles and creates content proposals
 with BEIREK area assignment, content angles, and key talking points.
+
+Uses ClaudeSession for efficient API calls.
 """
 
-import subprocess
 import json
 import re
 from pathlib import Path
@@ -21,6 +22,7 @@ from .storage import (
 )
 from .logger import get_logger
 from .config_manager import config, Constants, safe_json_parse
+from .claude_session import get_session, ClaudeSessionError
 
 # Module logger
 logger = get_logger(__name__)
@@ -33,7 +35,7 @@ class FramerError(Exception):
 
 class ContentFramer:
     """
-    Content framer using Claude CLI.
+    Content framer using Claude session.
 
     Analyzes articles and creates content proposals from BEIREK perspective.
     """
@@ -58,6 +60,9 @@ class ContentFramer:
         # Load framing prompt
         self.framing_prompt = self._load_prompt('framing_prompt.txt')
 
+        # Get Claude session
+        self.session = get_session()
+
         logger.info("Framer initialized")
 
     def _load_prompt(self, filename: str) -> str:
@@ -72,7 +77,7 @@ class ContentFramer:
 
     def call_claude_cli(self, prompt: str) -> str:
         """
-        Call Claude CLI with prompt.
+        Call Claude via session.
 
         Args:
             prompt: Prompt string
@@ -80,47 +85,12 @@ class ContentFramer:
         Returns:
             Claude's response
         """
-        process = None
         try:
-            process = subprocess.Popen(
-                ['claude', '--print'],
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                shell=False  # Explicit for security
-            )
+            # Use session for efficient Claude calls
+            return self.session.query(prompt, include_system_prompt=False)
 
-            stdout, stderr = process.communicate(
-                input=prompt,
-                timeout=self.timeout
-            )
-
-            if process.returncode != 0:
-                raise FramerError(f"Claude CLI error: {stderr}")
-
-            return stdout.strip()
-
-        except subprocess.TimeoutExpired:
-            if process:
-                process.kill()
-                process.wait()  # Ensure process is reaped
-            logger.error(f"Claude CLI timeout after {self.timeout}s during framing")
-            raise FramerError(
-                f"Claude CLI timeout ({self.timeout}s asildi). "
-                "Cerceveleme islemi cok uzun suruyor."
-            )
-        except FileNotFoundError:
-            raise FramerError(
-                "Claude CLI bulunamadi! Lutfen kurun: https://claude.ai/cli"
-            )
-        except FramerError:
-            raise
-        except Exception as e:
-            if process and process.poll() is None:
-                process.kill()
-                process.wait()
-            logger.error(f"Claude CLI error in framer: {e}")
+        except ClaudeSessionError as e:
+            logger.error(f"Claude session error in framer: {e}")
             raise FramerError(f"Claude CLI hatasi: {e}")
 
     def frame_article(self, article: Dict) -> Optional[Dict]:
