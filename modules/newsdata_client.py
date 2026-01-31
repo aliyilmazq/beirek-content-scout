@@ -248,7 +248,9 @@ class NewsDataClient:
 
     def fetch_all_articles(self, progress_callback=None) -> List[Dict]:
         """
-        Fetch articles using all configured keywords and categories.
+        Fetch articles using a SINGLE API call to conserve credits.
+
+        Uses the 'energy' category which covers most BEIREK topics.
 
         Args:
             progress_callback: Optional callback(current, total)
@@ -259,11 +261,35 @@ class NewsDataClient:
         all_articles = []
         seen_urls = set(self._cache.get('seen_urls', []))
 
-        # Calculate total requests
+        if progress_callback:
+            progress_callback(1, 1)
+
+        # SINGLE API call - use 'energy' category for broad coverage
+        articles = self.fetch_by_category('energy')
+        for article in articles:
+            if article['url'] not in seen_urls:
+                seen_urls.add(article['url'])
+                all_articles.append(article)
+
+        # Update cache
+        self._cache['seen_urls'] = list(seen_urls)[-1000:]
+        self._cache['last_fetch'] = datetime.now().isoformat()
+        self._save_cache()
+
+        logger.info(f"NewsData fetched {len(all_articles)} unique articles (1 API call)")
+        return all_articles
+
+    def fetch_all_articles_full(self, progress_callback=None) -> List[Dict]:
+        """
+        DEPRECATED: Full fetch using all keywords and categories.
+        Uses many API credits - use fetch_all_articles() instead.
+        """
+        all_articles = []
+        seen_urls = set(self._cache.get('seen_urls', []))
+
         total_requests = len(self.keywords) + len(self.categories)
         current = 0
 
-        # Fetch by keywords
         for keyword in self.keywords:
             if progress_callback:
                 current += 1
@@ -275,7 +301,6 @@ class NewsDataClient:
                     seen_urls.add(article['url'])
                     all_articles.append(article)
 
-        # Fetch by categories
         for category in self.categories:
             if progress_callback:
                 current += 1
@@ -287,12 +312,11 @@ class NewsDataClient:
                     seen_urls.add(article['url'])
                     all_articles.append(article)
 
-        # Update cache
-        self._cache['seen_urls'] = list(seen_urls)[-1000:]  # Keep last 1000 URLs
+        self._cache['seen_urls'] = list(seen_urls)[-1000:]
         self._cache['last_fetch'] = datetime.now().isoformat()
         self._save_cache()
 
-        logger.info(f"NewsData fetched {len(all_articles)} unique articles")
+        logger.info(f"NewsData fetched {len(all_articles)} unique articles (full mode)")
         return all_articles
 
     def is_configured(self) -> bool:
