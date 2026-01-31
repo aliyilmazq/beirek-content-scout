@@ -5,20 +5,20 @@ BEIREK Content Scout Modules
 This package contains all the core modules for the content scout application.
 
 Modules:
-- scanner: RSS/Web scraping for news collection
+- scanner: RSS scanning and NewsData.io integration
 - filter: Claude-powered article filtering
 - generator: Content generation (article, linkedin, twitter)
 - framer: Content framing and proposal creation
-- storage: Database and file operations
+- storage: Folder-based storage (replaced SQLite)
 - ui: Terminal user interface
-- concept_manager: Daily concept selection and generation
-- request_manager: Request pool management
+- newsdata_client: NewsData.io API client
+- claude_session: Claude CLI session management
 - config_manager: Singleton configuration management
 - logger: Centralized logging
 - cache: Simple file-based caching
 """
 
-from .storage import init_database, get_db_connection, DatabaseConnection
+from .storage import init_database, get_storage, FolderStorage
 from .config_manager import (
     config, Constants,
     check_claude_cli, ensure_paths_exist, safe_json_parse, retry
@@ -29,8 +29,8 @@ from .cache import SimpleCache, get_cache, cached
 __all__ = [
     # Storage
     'init_database',
-    'get_db_connection',
-    'DatabaseConnection',
+    'get_storage',
+    'FolderStorage',
     # Config
     'config',
     'Constants',

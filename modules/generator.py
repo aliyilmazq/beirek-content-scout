@@ -20,7 +20,8 @@ from datetime import datetime
 
 from .storage import (
     save_generated_content, get_content_folder_path,
-    save_content_to_file, add_frontmatter, generate_slug
+    save_content_to_file, add_frontmatter, generate_slug,
+    get_storage
 )
 from .logger import get_logger
 from .config_manager import config, Constants
@@ -582,6 +583,52 @@ KONU:
                 )
 
         return folder_path
+
+    def generate_for_approved_article(self, approval: Dict) -> str:
+        """
+        Generate content for an approved article and save to folder structure.
+
+        Uses the new folder storage system with girdiler/ and raporlar/ folders.
+
+        Args:
+            approval: Approval dict from folder storage containing article and filter_result
+
+        Returns:
+            Path to report folder
+        """
+        storage = get_storage()
+
+        article = approval.get('article', {})
+        filter_result = approval.get('filter_result', {})
+
+        # Extract article info
+        title = article.get('title', '')
+        source_content = article.get('summary', '') or article.get('full_content', '')
+        beirek_area = filter_result.get('beirek_area', '4')
+        beirek_subarea = filter_result.get('beirek_subarea', '3')
+
+        # Save article to girdiler/ folder
+        storage.save_article_input(article, beirek_area, beirek_subarea)
+
+        # Generate content in all formats
+        topic = title
+        if filter_result.get('reason'):
+            topic = f"{title}\n\nKONU: {filter_result['reason']}"
+
+        content = self.generate_all_formats(
+            source_content=source_content,
+            topic=topic,
+            beirek_area=beirek_area,
+            beirek_subarea=beirek_subarea
+        )
+
+        # Save reports to raporlar/ folder
+        report_folder = storage.save_report(content, article, beirek_area, beirek_subarea)
+
+        # Mark content as generated
+        storage.mark_content_generated(approval.get('id', ''), report_folder)
+
+        return report_folder
 
     def validate_content(self, generated_content: str, source_content: str,
                         content_type: str) -> Tuple[bool, List[str]]:

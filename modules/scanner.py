@@ -2,14 +2,14 @@
 BEIREK Content Scout - Scanner Module
 =====================================
 
-RSS and web scraping for news collection.
+RSS feed scanning for news collection.
 
 Features:
 - RSS feed parsing
-- Web scraping for non-RSS sources
 - Full article content extraction
 - Duplicate detection
 - Error handling with retries
+- NewsData.io API integration (via NewsDataClient)
 """
 
 import feedparser
@@ -31,6 +31,7 @@ from .storage import (
 )
 from .logger import get_logger
 from .config_manager import config, Constants
+from .newsdata_client import NewsDataClient, NewsDataError
 
 # Module logger
 logger = get_logger(__name__)
@@ -43,11 +44,6 @@ class ScanError(Exception):
 
 class RSSParseError(ScanError):
     """RSS parsing error."""
-    pass
-
-
-class ScrapingError(ScanError):
-    """Web scraping error."""
     pass
 
 
@@ -292,145 +288,6 @@ class NewsScanner:
 
         return articles
 
-    def scrape_website(self, url: str, source_name: str = None,
-                      max_items: int = None) -> List[Dict]:
-        """
-        Scrape articles from website (for non-RSS sources).
-
-        Args:
-            url: Website URL
-            source_name: Source name
-            max_items: Maximum articles to fetch
-
-        Returns:
-            List of article dicts
-        """
-        max_items = max_items or self.max_articles_per_source
-        articles = []
-
-        try:
-            response = self._make_request(url)
-            soup = BeautifulSoup(response.text, 'lxml')
-
-            # Find article links - common patterns
-            article_links = self._find_article_links(soup, url)
-
-            for link in article_links[:max_items]:
-                title = link.get('title', '').strip()
-
-                # If no title from link, try to fetch from article page
-                if not title and link.get('url'):
-                    try:
-                        response = self._make_request(link['url'])
-                        article_soup = BeautifulSoup(response.text, 'lxml')
-                        title = self._extract_title(article_soup)
-                    except Exception:
-                        pass  # Skip if we can't fetch
-
-                article = {
-                    'title': title,
-                    'url': link.get('url', ''),
-                    'summary': link.get('summary', ''),
-                    'published_at': None,
-                    'source_name': source_name
-                }
-
-                # Only add if we have both title and URL
-                if article['title'] and article['url']:
-                    articles.append(article)
-
-        except Exception as e:
-            raise ScrapingError(f"Failed to scrape {url}: {e}")
-
-        return articles
-
-    def _find_article_links(self, soup: BeautifulSoup, base_url: str) -> List[Dict]:
-        """
-        Find article links in HTML.
-
-        Uses multiple strategies to find article links.
-        """
-        links = []
-        seen_urls = set()
-
-        # Strategy 1: Look for article tags
-        for article in soup.find_all('article'):
-            link = article.find('a', href=True)
-            if link:
-                url = urljoin(base_url, link['href'])
-                if url not in seen_urls and self._is_article_url(url):
-                    seen_urls.add(url)
-                    # Fix: Proper title extraction with None handling
-                    title = link.get_text(strip=True)
-                    if not title:
-                        heading = article.find(['h1', 'h2', 'h3'])
-                        if heading:
-                            title = heading.get_text(strip=True)
-                    if title:  # Only add if title found
-                        links.append({'url': url, 'title': title, 'summary': ''})
-
-        # Strategy 2: Look for headlines
-        for heading in soup.find_all(['h1', 'h2', 'h3', 'h4']):
-            link = heading.find('a', href=True)
-            if link:
-                url = urljoin(base_url, link['href'])
-                if url not in seen_urls and self._is_article_url(url):
-                    title = link.get_text(strip=True)
-                    if title:  # Only add if title found
-                        seen_urls.add(url)
-                        links.append({
-                            'url': url,
-                            'title': title,
-                            'summary': ''
-                        })
-
-        # Strategy 3: Look for common news list patterns (expanded selectors)
-        news_selectors = [
-            '.news-item', '.article-item', '.post-item', '.story',
-            '.news-list li', '.article-list li', '.post-list li',
-            '.card', '.news-card', '.article-card',
-            '[data-article]', '[data-post]', '.feed-item'
-        ]
-        for selector in news_selectors:
-            for item in soup.select(selector):
-                link = item.find('a', href=True)
-                if link:
-                    url = urljoin(base_url, link['href'])
-                    if url not in seen_urls and self._is_article_url(url):
-                        # Try multiple title sources
-                        title = link.get_text(strip=True)
-                        if not title:
-                            # Try finding a heading within the item
-                            heading = item.find(['h1', 'h2', 'h3', 'h4', 'h5'])
-                            if heading:
-                                title = heading.get_text(strip=True)
-                        if not title:
-                            # Try title attribute
-                            title = link.get('title', '').strip()
-                        if title:  # Only add if title found
-                            seen_urls.add(url)
-                            links.append({
-                                'url': url,
-                                'title': title,
-                                'summary': ''
-                            })
-
-        return links
-
-    def _is_article_url(self, url: str) -> bool:
-        """Check if URL looks like an article."""
-        # Exclude common non-article URLs
-        exclude_patterns = [
-            '/tag/', '/category/', '/author/', '/page/',
-            '/search', '/login', '/register', '/contact',
-            '/about', '/privacy', '/terms', '/subscribe',
-            '.pdf', '.jpg', '.png', '.gif',
-            'facebook.com', 'twitter.com', 'linkedin.com'
-        ]
-
-        url_lower = url.lower()
-        return not any(pattern in url_lower for pattern in exclude_patterns)
-
     def extract_article_content(self, url: str) -> Dict:
         """
         Extract full article content from URL.
@@ -627,7 +484,7 @@ class NewsScanner:
 
     def scan_source(self, source: Dict) -> List[Dict]:
         """
-        Scan a single source.
+        Scan a single source (RSS only).
 
         Args:
             source: Source dict from database
@@ -638,16 +495,16 @@ class NewsScanner:
         articles = []
 
         try:
+            # Only process sources with RSS feeds
             if source.get('rss_url'):
                 articles = self.fetch_rss_feed(
                     source['rss_url'],
                     source['name']
                 )
             else:
-                articles = self.scrape_website(
-                    source['url'],
-                    source['name']
-                )
+                # Skip non-RSS sources (web scraping removed)
+                logger.debug(f"Skipping non-RSS source: {source['name']}")
+                return []
 
             # Filter out already scanned articles
             new_articles = [a for a in articles if not article_exists(a['url'])]
@@ -767,6 +624,36 @@ class NewsScanner:
                 if source_result['error']:
                     results['errors'].append(f"{source_result['source_name']}: {source_result['error']}")
 
+        # Fetch from NewsData.io API
+        newsdata_articles = self._fetch_newsdata_articles()
+        if newsdata_articles:
+            for article in newsdata_articles:
+                # Check for duplicate titles if enabled
+                if self.check_duplicates and is_duplicate_title(
+                    article['title'],
+                    threshold=self.duplicate_threshold
+                ):
+                    results['duplicates_skipped'] += 1
+                    continue
+
+                # Check if URL already exists
+                if article_exists(article['url']):
+                    continue
+
+                article_id = add_article(
+                    source_id=None,  # NewsData articles don't have a source_id
+                    title=article['title'],
+                    url=article['url'],
+                    summary=article.get('summary'),
+                    published_at=article.get('published_at')
+                )
+
+                if article_id > 0:
+                    results['new_articles'] += 1
+                    results['articles_found'] += 1
+
+            logger.info(f"NewsData.io: Added {len(newsdata_articles)} potential articles")
+
         # Complete scan record
         complete_scan(
             scan_id=scan_id,
@@ -777,6 +664,29 @@ class NewsScanner:
         )
 
         return results
+
+    def _fetch_newsdata_articles(self) -> List[Dict]:
+        """
+        Fetch articles from NewsData.io API.
+
+        Returns:
+            List of article dicts
+        """
+        try:
+            newsdata_client = NewsDataClient()
+            if not newsdata_client.is_configured():
+                logger.debug("NewsData API not configured, skipping")
+                return []
+
+            articles = newsdata_client.fetch_all_articles()
+            return articles
+
+        except NewsDataError as e:
+            logger.warning(f"NewsData API error: {e}")
+            return []
+        except Exception as e:
+            logger.error(f"Unexpected error fetching NewsData articles: {e}")
+            return []
 
     def _make_request(self, url: str, retries: int = None) -> requests.Response:
         """
@@ -814,7 +724,7 @@ class NewsScanner:
                 wait_time = 2 ** attempt
                 logger.warning(f"Request error (attempt {attempt + 1}/{retries}): {url} - {e}")
                 if attempt == retries - 1:
-                    raise ScrapingError(f"Request failed: {e}")
+                    raise ScanError(f"Request failed: {e}")
                 time.sleep(wait_time)
 
     def _parse_date(self, date_str: str) -> Optional[datetime]:

@@ -3,11 +3,18 @@
 
 app:
   name: "BEIREK Content Scout"
-  version: "1.0.0"
+  version: "2.0.0"
 
-# Database settings
-database:
-  path: "data/scout.db"
+# Storage settings (folder-based)
+storage:
+  type: "folder"
+  content_base: "content"
+  data_path: "data"
+
+# Folder structure
+folder_structure:
+  inputs_folder: "girdiler"
+  reports_folder: "raporlar"
 
 # Scanning settings
 scanning:
@@ -102,3 +109,38 @@ logging:
 claude:
   timeout_seconds: 180
   max_retries: 3
+
+# NewsData.io API settings
+newsdata:
+  api_key: "pub_68078bc44c9c4c47b399bd75538b164c"
+  base_url: "https://newsdata.io/api/1"
+  # Query categories (energy, business, technology, world)
+  categories:
+    - "energy"
+    - "business"
+    - "technology"
+  # Keywords for filtering
+  keywords:
+    - "renewable energy"
+    - "solar power"
+    - "wind energy"
+    - "energy storage"
+    - "battery storage"
+    - "grid infrastructure"
+    - "power plant"
+    - "project finance"
+    - "infrastructure investment"
+    - "data center"
+    - "EPC contract"
+    - "PPA"
+    - "green hydrogen"
+  # Language filter
+  language: "en"
+  # Countries (optional)
+  countries:
+    - "us"
+    - "gb"
+    - "de"
+    - "au"
+  # Results per query
+  max_results: 50

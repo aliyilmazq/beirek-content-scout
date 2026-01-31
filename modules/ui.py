@@ -67,38 +67,36 @@ class TerminalUI:
             menu_content = """
 [bold cyan]Ana Menu[/bold cyan]
 
-  [1] Tara ve Cercevele
-  [2] Onerileri Gozden Gecir (Kabul/Red)
-  [3] Klasor Olustur (Kabul Edilenler)
-  [4] Icerik Uret (Hazir Olanlar)
-  [5] Gunluk Kavram
-  [6] Istek Havuzu
-  [7] Is Akisi Durumu
-  [8] Istatistikler
-  [9] Ayarlar
+  [1] Tara ve Filtrele (RSS + NewsData API)
+  [2] Haber Onayla (E/H/S/T)
+  [3] Icerik Uret (Onaylanmis Haberler)
+  [4] Gunluk Kavram
+  [5] Istek Havuzu
+  [6] Is Akisi Durumu
+  [7] Istatistikler
+  [8] Ayarlar
   [0] Cikis
 """
-            valid_choices = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+            valid_choices = ['0', '1', '2', '3', '4', '5', '6', '7', '8']
         else:
             menu_content = """
 [bold cyan]Ana Menu[/bold cyan]
 
   [1] Tara (sadece tarama) [dim][CLI YOK - filtreleme devre disi][/dim]
-  [dim][2] Onerileri Gozden Gecir [CLI YOK][/dim]
-  [dim][3] Klasor Olustur [CLI YOK][/dim]
-  [dim][4] Icerik Uret [CLI YOK][/dim]
-  [dim][5] Gunluk Kavram [CLI YOK][/dim]
-  [dim][6] Istek Havuzu [CLI YOK][/dim]
-  [7] Is Akisi Durumu
-  [8] Istatistikler
-  [9] Ayarlar
+  [dim][2] Haber Onayla [CLI YOK][/dim]
+  [dim][3] Icerik Uret [CLI YOK][/dim]
+  [dim][4] Gunluk Kavram [CLI YOK][/dim]
+  [dim][5] Istek Havuzu [CLI YOK][/dim]
+  [6] Is Akisi Durumu
+  [7] Istatistikler
+  [8] Ayarlar
   [0] Cikis
 
 [bold yellow]Uyari:[/bold yellow] Claude CLI bulunamadi!
    Filtreleme ve icerik uretimi icin Claude CLI gereklidir.
    Kurulum: https://claude.ai/cli
 """
-            valid_choices = ['0', '1', '7', '8', '9']
+            valid_choices = ['0', '1', '6', '7', '8']
 
         menu = Panel(
             menu_content,
@@ -617,6 +615,139 @@ Kaynak: {proposal.get('source_name', 'N/A')}
             box=box.DOUBLE
         )
         self.console.print(panel)
+
+    def show_approval_flow(self, articles: List[Dict]) -> Dict:
+        """
+        Show interactive approval flow for filtered articles.
+
+        Displays each article with details and allows user to:
+        [E] Onayla (Approve)
+        [H] Reddet (Reject)
+        [S] Atla (Skip)
+        [T] Tumunu Onayla (Approve All)
+
+        Args:
+            articles: List of article dicts with filter results
+
+        Returns:
+            Dict with 'approved', 'rejected', 'skipped' lists of article IDs
+        """
+        if not articles:
+            self.console.print("[yellow]Onaylanacak haber yok.[/yellow]")
+            return {'approved': [], 'rejected': [], 'skipped': []}
+
+        result = {'approved': [], 'rejected': [], 'skipped': []}
+
+        header = Panel(
+            f"[bold cyan]Haber Onay Akisi ({len(articles)} haber)[/bold cyan]\n\n"
+            "[dim]Her haber icin karar verin:[/dim]\n"
+            "  [E] Onayla  [H] Reddet  [S] Atla  [T] Tumunu Onayla  [Q] Cikis",
+            border_style="cyan",
+            box=box.DOUBLE
+        )
+        self.console.print(header)
+
+        for i, article in enumerate(articles, 1):
+            # Get article info
+            art = article.get('article', article)
+            filter_res = article.get('filter_result', article)
+
+            title = art.get('title', 'Baslik Yok')
+            source = art.get('source_name', 'Kaynak Bilinmiyor')
+            url = art.get('url', '')
+            summary = art.get('summary', '')[:300]
+            published = art.get('published_at', '')
+
+            # Get filter result info
+            score = filter_res.get('score', 0)
+            reason = filter_res.get('reason', '')
+            beirek_area = filter_res.get('beirek_area', '')
+            beirek_subarea = filter_res.get('beirek_subarea', '')
+
+            # Format score with color
+            score_val = float(score) if score else 0
+            score_style = "green" if score_val >= 8 else "yellow" if score_val >= 6 else "red"
+
+            # Build detail panel
+            detail_content = f"""
+[bold]{i}/{len(articles)}. {title}[/bold]
+
+[bold]Kaynak:[/bold] {source}
+[bold]URL:[/bold] {url[:60]}{'...' if len(url) > 60 else ''}
+[bold]Tarih:[/bold] {published}
+
+[bold]Relevance Skoru:[/bold] [{score_style}]{score_val:.1f}/10[/{score_style}]
+[bold]BEIREK Alani:[/bold] {beirek_area}.{beirek_subarea}
+[bold]Neden Secildi:[/bold] {reason}
+
+[bold]Ozet:[/bold]
+{summary}{'...' if len(art.get('summary', '')) > 300 else ''}
+"""
+
+            panel = Panel(
+                detail_content,
+                title=f"Haber #{i}",
+                border_style="blue",
+                box=box.ROUNDED
+            )
+            self.console.print(panel)
+
+            # Get user decision
+            while True:
+                choice = Prompt.ask(
+                    "[bold]Karar[/bold]",
+                    choices=['e', 'h', 's', 't', 'q', 'E', 'H', 'S', 'T', 'Q'],
+                    default='s'
+                ).lower()
+
+                article_id = article.get('id', str(i))
+
+                if choice == 'e':
+                    result['approved'].append(article_id)
+                    self.console.print("[green]Onaylandi[/green]\n")
+                    break
+                elif choice == 'h':
+                    result['rejected'].append(article_id)
+                    self.console.print("[red]Reddedildi[/red]\n")
+                    break
+                elif choice == 's':
+                    result['skipped'].append(article_id)
+                    self.console.print("[yellow]Atlandi[/yellow]\n")
+                    break
+                elif choice == 't':
+                    # Approve all remaining
+                    result['approved'].append(article_id)
+                    for remaining in articles[i:]:
+                        rem_id = remaining.get('id', str(articles.index(remaining) + 1))
+                        result['approved'].append(rem_id)
+                    self.console.print(f"[green]Tumu onaylandi ({len(articles) - i + 1} haber)[/green]\n")
+                    return result
+                elif choice == 'q':
+                    # Skip all remaining
+                    result['skipped'].append(article_id)
+                    for remaining in articles[i:]:
+                        rem_id = remaining.get('id', str(articles.index(remaining) + 1))
+                        result['skipped'].append(rem_id)
+                    self.console.print("[yellow]Cikis yapildi[/yellow]\n")
+                    return result
+
+        # Show summary
+        summary_content = f"""
+[bold]Onay Ozeti[/bold]
+
+[green]Onaylanan:[/green] {len(result['approved'])}
+[red]Reddedilen:[/red] {len(result['rejected'])}
+[yellow]Atlanan:[/yellow] {len(result['skipped'])}
+"""
+        summary_panel = Panel(
+            summary_content,
+            title="Sonuc",
+            border_style="green",
+            box=box.ROUNDED
+        )
+        self.console.print(summary_panel)
+
+        return result
 
     def confirm(self, message: str) -> bool:
         """Get user confirmation."""
