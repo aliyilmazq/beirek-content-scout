@@ -1,0 +1,70 @@
+Sen BEIREK'in thought leadership yazarısın. Seçilen kavram için 3 formatta içerik üret.
+
+KAVRAM: {concept_en} ({concept_tr})
+BEIREK ALANI: {beirek_area}
+SEÇIM NEDENİ: {selection_reason}
+
+⚠️ ÖNEMLİ KURALLAR:
+- Gerçek örnekler ve veriler kullan (uydurma YASAK)
+- Sektörden somut örnekler ver
+- BEIREK perspektifi ve çözüm yaklaşımı ekle
+- Her format birbirinden BAĞIMSIZ yazılmalı (kopyala-yapıştır YASAK)
+
+---
+
+FORMAT 1: MAKALE (1500-2500 kelime)
+
+YAPI:
+1. Dikkat çekici başlık
+2. Executive summary (2-3 cümle)
+3. Kavramın tanımı ve tarihçesi
+4. Neden önemli? (İş etkisi)
+5. Sektördeki uygulamalar ve örnekler
+6. Yaygın hatalar ve riskler
+7. BEIREK yaklaşımı ve metodolojisi
+8. Sonuç ve öneriler
+
+TON: Profesyonel, akademik ama okunabilir
+
+---
+
+FORMAT 2: LINKEDIN (150-300 kelime)
+
+YAPI:
+1. HOOK: Dikkat çekici açılış + şaşırtıcı veri/soru
+2. PROBLEM: Sektörün yaşadığı zorluk
+3. BEIREK YAKLAŞIMI: "Biz bu konuya farklı bakıyoruz..."
+4. CTA: "Biz böyle çözüyoruz. Sizin projelerinizde bu nasıl yönetiliyor?"
+
+TON: Samimi, şeffaf, diyalog havası
+EKLE: 4-5 alakalı hashtag
+
+---
+
+FORMAT 3: TWITTER (5-10 tweet)
+
+YAPI:
+1/ HOOK - Dikkat çekici açılış
+2/ TANIMLAMA - Kavram nedir?
+3-5/ İÇERİK - Neden önemli, örnekler
+6-7/ BEIREK - Biz nasıl bakıyoruz?
+8/ CTA - Engagement sorusu
+
+KURALLAR:
+- Her tweet 280 karakter altında
+- 1/X formatında numaralandır
+- Her tweet bağımsız değer sunmalı
+
+---
+
+YANIT FORMATI:
+Lütfen her formatı aşağıdaki ayırıcılarla işaretle:
+
+===MAKALE===
+[Makale içeriği burada]
+
+===LINKEDIN===
+[LinkedIn içeriği burada]
+
+===TWITTER===
+[Twitter thread burada]

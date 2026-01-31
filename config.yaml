@@ -1,0 +1,104 @@
+# BEIREK Content Scout Configuration
+# ===================================
+
+app:
+  name: "BEIREK Content Scout"
+  version: "1.0.0"
+
+# Database settings
+database:
+  path: "data/scout.db"
+
+# Scanning settings
+scanning:
+  max_articles_per_source: 10
+  scan_interval_hours: 24
+  timeout_seconds: 30
+  max_retries: 3
+
+# Filtering settings
+filtering:
+  min_relevance_score: 7
+  batch_size: 10
+
+# Content generation settings
+content:
+  # NOTE: Use repo-relative path (will be resolved from base_path)
+  # For external content folder, use absolute path or "../content"
+  output_base_path: "content"
+  article_min_words: 1500
+  article_max_words: 2500
+  linkedin_min_words: 150
+  linkedin_max_words: 300
+  twitter_min_tweets: 5
+  twitter_max_tweets: 10
+
+# BEIREK work areas mapping
+beirek_areas:
+  "1":
+    name: "deal-contract-advisory"
+    subareas:
+      "1": "deal-architecture-term-sheet-design"
+      "2": "transaction-governance-negotiation"
+      "3": "contract-lifecycle-management"
+      "4": "data-room-due-diligence-coordination"
+  "2":
+    name: "ceo-office-governance"
+    subareas:
+      "1": "ceo-office-setup-operating-rhythm"
+      "2": "authority-matrix-approval-workflows"
+      "3": "okr-kpi-architecture"
+      "4": "executive-reporting-risk-governance"
+  "3":
+    name: "development-finance-compliance"
+    subareas:
+      "1": "ifi-dfi-relationship-management"
+      "2": "requirements-library-traceability"
+      "3": "lender-grade-reporting-factory"
+      "4": "covenant-monitoring-compliance"
+  "4":
+    name: "project-development-finance"
+    subareas:
+      "1": "feasibility-studies-roadmap"
+      "2": "site-assessment-permitting"
+      "3": "project-finance-structuring"
+      "4": "financial-modeling-value-engineering"
+  "5":
+    name: "engineering-delivery"
+    subareas:
+      "1": "feed-detailed-design-management"
+      "2": "procurement-vendor-governance"
+      "3": "epc-construction-management"
+      "4": "commissioning-performance-testing"
+  "6":
+    name: "asset-management-om"
+    subareas:
+      "1": "om-governance-sla-management"
+      "2": "performance-monitoring-optimization"
+      "3": "predictive-maintenance-strategy"
+      "4": "modernization-decommissioning"
+  "7":
+    name: "gtm-jv-management"
+    subareas:
+      "1": "market-entry-strategy-execution"
+      "2": "partner-development-selection"
+      "3": "jv-setup-governance-controls"
+      "4": "commercial-frameworks-kpis"
+  "8":
+    name: "digital-platforms"
+    subareas:
+      "1": "erp-enterprise-digitization"
+      "2": "pmis-ppm-implementation"
+      "3": "data-ai-enablement"
+
+# Logging settings
+logging:
+  level: "INFO"
+  path: "logs/"
+  max_file_size_mb: 10
+  backup_count: 5
+
+# Claude CLI settings
+claude:
+  timeout_seconds: 180
+  max_retries: 3

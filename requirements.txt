@@ -1,0 +1,22 @@
+# BEIREK Content Scout Dependencies
+
+# RSS/Web Scraping
+feedparser>=6.0.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Configuration
+pyyaml>=6.0.0
+
+# Terminal UI
+rich>=13.0.0
+
+# Date/Time
+python-dateutil>=2.8.0
+
+# File watching (for request pool)
+watchdog>=3.0.0
+
+# Text processing
+readability-lxml>=0.8.1

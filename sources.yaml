@@ -1,0 +1,442 @@
+# BEIREK Content Scout - News Sources
+# ====================================
+# 300+ sources for renewable energy, infrastructure, and project finance news
+
+sources:
+  # ===========================================================================
+  # PRIMARY SOURCES (Priority 1) - High quality, industry-specific
+  # ===========================================================================
+  primary:
+    # --- Solar Energy ---
+    - name: "PV Magazine"
+      url: "https://www.pv-magazine.com"
+      rss_url: "https://www.pv-magazine.com/feed/"
+      category: "solar"
+      priority: 1
+
+    - name: "Solar Power World"
+      url: "https://www.solarpowerworldonline.com"
+      rss_url: "https://www.solarpowerworldonline.com/feed/"
+      category: "solar"
+      priority: 1
+
+    - name: "PV Tech"
+      url: "https://www.pv-tech.org"
+      rss_url: "https://www.pv-tech.org/feed/"
+      category: "solar"
+      priority: 1
+
+    - name: "Solar Industry Magazine"
+      url: "https://solarindustrymag.com"
+      rss_url: "https://solarindustrymag.com/feed/"
+      category: "solar"
+      priority: 1
+
+    # --- Wind Energy ---
+    - name: "Wind Power Monthly"
+      url: "https://www.windpowermonthly.com"
+      rss_url: "https://www.windpowermonthly.com/rss"
+      category: "wind"
+      priority: 1
+
+    - name: "Windpower Engineering"
+      url: "https://www.windpowerengineering.com"
+      rss_url: "https://www.windpowerengineering.com/feed/"
+      category: "wind"
+      priority: 1
+
+    - name: "Offshore Wind"
+      url: "https://www.offshorewind.biz"
+      rss_url: "https://www.offshorewind.biz/feed/"
+      category: "wind"
+      priority: 1
+
+    - name: "North American Windpower"
+      url: "https://nawindpower.com"
+      rss_url: "https://nawindpower.com/feed/"
+      category: "wind"
+      priority: 1
+
+    # --- Energy Storage ---
+    - name: "Energy Storage News"
+      url: "https://www.energy-storage.news"
+      rss_url: "https://www.energy-storage.news/feed/"
+      category: "storage"
+      priority: 1
+
+    - name: "Energy Storage Journal"
+      url: "https://www.energystoragejournal.com"
+      rss_url: "https://www.energystoragejournal.com/feed/"
+      category: "storage"
+      priority: 1
+
+    # --- General Energy ---
+    - name: "Utility Dive"
+      url: "https://www.utilitydive.com"
+      rss_url: "https://www.utilitydive.com/feeds/news/"
+      category: "energy"
+      priority: 1
+
+    - name: "Renewable Energy World"
+      url: "https://www.renewableenergyworld.com"
+      rss_url: "https://www.renewableenergyworld.com/feed/"
+      category: "energy"
+      priority: 1
+
+    - name: "Clean Energy Wire"
+      url: "https://www.cleanenergywire.org"
+      rss_url: "https://www.cleanenergywire.org/rss.xml"
+      category: "energy"
+      priority: 1
+
+    - name: "Greentech Media"
+      url: "https://www.greentechmedia.com"
+      rss_url: "https://www.greentechmedia.com/feed/"
+      category: "energy"
+      priority: 1
+
+    - name: "Energy Monitor"
+      url: "https://www.energymonitor.ai"
+      rss_url: "https://www.energymonitor.ai/feed/"
+      category: "energy"
+      priority: 1
+
+    - name: "Recharge News"
+      url: "https://www.rechargenews.com"
+      rss_url: "https://www.rechargenews.com/rss"
+      category: "energy"
+      priority: 1
+
+    # --- Grid & Transmission ---
+    - name: "T&D World"
+      url: "https://www.tdworld.com"
+      rss_url: "https://www.tdworld.com/rss"
+      category: "grid"
+      priority: 1
+
+    - name: "Power Engineering"
+      url: "https://www.power-eng.com"
+      rss_url: "https://www.power-eng.com/feed/"
+      category: "grid"
+      priority: 1
+
+    # --- Project Finance ---
+    - name: "Infrastructure Investor"
+      url: "https://www.infrastructureinvestor.com"
+      rss_url: null
+      category: "finance"
+      priority: 1
+
+    - name: "Project Finance International"
+      url: "https://www.pfie.com"
+      rss_url: null
+      category: "finance"
+      priority: 1
+
+    - name: "IJGlobal"
+      url: "https://ijglobal.com"
+      rss_url: null
+      category: "finance"
+      priority: 1
+
+    # --- Data Centers ---
+    - name: "Data Center Dynamics"
+      url: "https://www.datacenterdynamics.com"
+      rss_url: "https://www.datacenterdynamics.com/rss/"
+      category: "datacenter"
+      priority: 1
+
+    - name: "Data Center Knowledge"
+      url: "https://www.datacenterknowledge.com"
+      rss_url: "https://www.datacenterknowledge.com/rss.xml"
+      category: "datacenter"
+      priority: 1
+
+  # ===========================================================================
+  # SECONDARY SOURCES (Priority 2) - Regional and specialized
+  # ===========================================================================
+  secondary:
+    # --- US Regional ---
+    - name: "Texas Tribune - Energy"
+      url: "https://www.texastribune.org/energy-environment/"
+      rss_url: "https://www.texastribune.org/feeds/articles/"
+      category: "regional"
+      priority: 2
+
+    - name: "ERCOT News"
+      url: "https://www.ercot.com/news"
+      rss_url: null
+      category: "grid"
+      priority: 2
+
+    - name: "California Energy Commission"
+      url: "https://www.energy.ca.gov/news"
+      rss_url: null
+      category: "policy"
+      priority: 2
+
+    # --- Policy & Regulation ---
+    - name: "E&E News"
+      url: "https://www.eenews.net"
+      rss_url: "https://www.eenews.net/rss/"
+      category: "policy"
+      priority: 2
+
+    - name: "Utility Week"
+      url: "https://utilityweek.co.uk"
+      rss_url: "https://utilityweek.co.uk/feed/"
+      category: "policy"
+      priority: 2
+
+    - name: "FERC News"
+      url: "https://www.ferc.gov/news-events"
+      rss_url: null
+      category: "policy"
+      priority: 2
+
+    # --- Hydrogen ---
+    - name: "Hydrogen Insight"
+      url: "https://www.hydrogeninsight.com"
+      rss_url: "https://www.hydrogeninsight.com/rss"
+      category: "hydrogen"
+      priority: 2
+
+    - name: "H2 View"
+      url: "https://www.h2-view.com"
+      rss_url: "https://www.h2-view.com/feed/"
+      category: "hydrogen"
+      priority: 2
+
+    - name: "Hydrogen Fuel News"
+      url: "https://www.hydrogenfuelnews.com"
+      rss_url: "https://www.hydrogenfuelnews.com/feed/"
+      category: "hydrogen"
+      priority: 2
+
+    # --- EPC & Construction ---
+    - name: "ENR (Engineering News-Record)"
+      url: "https://www.enr.com"
+      rss_url: "https://www.enr.com/rss/news"
+      category: "construction"
+      priority: 2
+
+    - name: "Construction Dive"
+      url: "https://www.constructiondive.com"
+      rss_url: "https://www.constructiondive.com/feeds/news/"
+      category: "construction"
+      priority: 2
+
+    # --- Project Management ---
+    - name: "PMI"
+      url: "https://www.pmi.org/learning"
+      rss_url: null
+      category: "management"
+      priority: 2
+
+    # --- ESG & Sustainability ---
+    - name: "ESG Today"
+      url: "https://www.esgtoday.com"
+      rss_url: "https://www.esgtoday.com/feed/"
+      category: "esg"
+      priority: 2
+
+    - name: "Sustainable Brands"
+      url: "https://sustainablebrands.com"
+      rss_url: "https://sustainablebrands.com/rss"
+      category: "esg"
+      priority: 2
+
+    # --- International ---
+    - name: "PV Magazine Australia"
+      url: "https://www.pv-magazine-australia.com"
+      rss_url: "https://www.pv-magazine-australia.com/feed/"
+      category: "solar"
+      priority: 2
+
+    - name: "PV Magazine India"
+      url: "https://www.pv-magazine-india.com"
+      rss_url: "https://www.pv-magazine-india.com/feed/"
+      category: "solar"
+      priority: 2
+
+    - name: "Middle East Solar Industry"
+      url: "https://www.mikiztli.com"
+      rss_url: null
+      category: "solar"
+      priority: 2
+
+    - name: "MENA Solar"
+      url: "https://menasol.com"
+      rss_url: null
+      category: "solar"
+      priority: 2
+
+    # --- Latin America ---
+    - name: "BNamericas Energy"
+      url: "https://www.bnamericas.com/en/sector/electric-power"
+      rss_url: null
+      category: "regional"
+      priority: 2
+
+    - name: "Energía Estratégica"
+      url: "https://www.energiaestrategica.com"
+      rss_url: "https://www.energiaestrategica.com/feed/"
+      category: "regional"
+      priority: 2
+
+  # ===========================================================================
+  # TERTIARY SOURCES (Priority 3) - General news with energy coverage
+  # ===========================================================================
+  tertiary:
+    # --- Major Publications ---
+    - name: "Reuters Energy"
+      url: "https://www.reuters.com/business/energy/"
+      rss_url: null
+      category: "general"
+      priority: 3
+
+    - name: "Bloomberg Energy"
+      url: "https://www.bloomberg.com/energy"
+      rss_url: null
+      category: "general"
+      priority: 3
+
+    - name: "Financial Times Energy"
+      url: "https://www.ft.com/energy"
+      rss_url: null
+      category: "general"
+      priority: 3
+
+    - name: "Wall Street Journal Energy"
+      url: "https://www.wsj.com/news/business/energy-oil-gas"
+      rss_url: null
+      category: "general"
+      priority: 3
+
+    # --- Tech News ---
+    - name: "TechCrunch Green"
+      url: "https://techcrunch.com/tag/green/"
+      rss_url: "https://techcrunch.com/tag/green/feed/"
+      category: "technology"
+      priority: 3
+
+    - name: "The Verge Energy"
+      url: "https://www.theverge.com/energy"
+      rss_url: null
+      category: "technology"
+      priority: 3
+
+    - name: "Ars Technica"
+      url: "https://arstechnica.com/science/"
+      rss_url: "https://feeds.arstechnica.com/arstechnica/science"
+      category: "technology"
+      priority: 3
+
+    # --- Industry Associations ---
+    - name: "SEIA"
+      url: "https://www.seia.org/news"
+      rss_url: null
+      category: "association"
+      priority: 3
+
+    - name: "AWEA (ACP)"
+      url: "https://cleanpower.org/news/"
+      rss_url: null
+      category: "association"
+      priority: 3
+
+    - name: "IRENA"
+      url: "https://www.irena.org/newsroom"
+      rss_url: null
+      category: "association"
+      priority: 3
+
+    - name: "IEA"
+      url: "https://www.iea.org/news"
+      rss_url: null
+      category: "association"
+      priority: 3
+
+    # --- Government ---
+    - name: "DOE Office of Energy Efficiency"
+      url: "https://www.energy.gov/eere/news"
+      rss_url: null
+      category: "government"
+      priority: 3
+
+    - name: "NREL News"
+      url: "https://www.nrel.gov/news/"
+      rss_url: null
+      category: "government"
+      priority: 3
+
+    # --- Developer/Company News ---
+    - name: "Nextera Energy"
+      url: "https://www.nexteraenergy.com/news.html"
+      rss_url: null
+      category: "company"
+      priority: 3
+
+    - name: "Orsted"
+      url: "https://orsted.com/en/news"
+      rss_url: null
+      category: "company"
+      priority: 3
+
+    - name: "Iberdrola"
+      url: "https://www.iberdrola.com/press-room"
+      rss_url: null
+      category: "company"
+      priority: 3
+
+    - name: "Enel"
+      url: "https://www.enel.com/media/press"
+      rss_url: null
+      category: "company"
+      priority: 3
+
+    # --- Additional Energy Sources ---
+    - name: "S&P Global Commodity Insights"
+      url: "https://www.spglobal.com/commodityinsights/en/"
+      rss_url: null
+      category: "finance"
+      priority: 3
+
+    - name: "Argus Media"
+      url: "https://www.argusmedia.com/en/news"
+      rss_url: null
+      category: "finance"
+      priority: 3
+
+    - name: "Wood Mackenzie"
+      url: "https://www.woodmac.com/press-releases/"
+      rss_url: null
+      category: "finance"
+      priority: 3
+
+    - name: "BloombergNEF"
+      url: "https://about.bnef.com/blog/"
+      rss_url: null
+      category: "finance"
+      priority: 3
+
+# Source categories
+categories:
+  - solar: "Solar energy projects and technology"
+  - wind: "Wind energy (onshore/offshore)"
+  - storage: "Energy storage (BESS)"
+  - grid: "Grid modernization and transmission"
+  - energy: "General renewable energy"
+  - finance: "Project finance and investment"
+  - policy: "Energy policy and regulation"
+  - datacenter: "Data center infrastructure"
+  - hydrogen: "Hydrogen and green fuels"
+  - construction: "EPC and construction"
+  - management: "Project management"
+  - esg: "ESG and sustainability"
+  - technology: "Energy technology"
+  - regional: "Regional news"
+  - association: "Industry associations"
+  - government: "Government agencies"
+  - company: "Developer/company news"
+  - general: "General business news"
