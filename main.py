@@ -107,7 +107,20 @@ class ContentScout:
         if not self.cli_available:
             self.ui.show_warning("Claude CLI bulunamadi! Bazi ozellikler devre disi.")
             self.ui.pause()
+            return
 
+        # AUTO-START: Run scan, filter, and approval flow automatically
+        try:
+            self.run_auto_flow()
+        except KeyboardInterrupt:
+            self.cleanup()
+            self.ui.show_info("\nCikiliyor...")
+            sys.exit(0)
+        except Exception as e:
+            self.ui.show_error(str(e))
+            logger.error(f"Error in auto flow: {e}", exc_info=True)
+
+        # After auto flow, show menu for additional actions
         while True:
             try:
                 choice = self.ui.show_main_menu(self.cli_available)
@@ -148,6 +161,38 @@ class ContentScout:
                 self.ui.show_error(str(e))
                 logger.error(f"Error in main loop: {e}", exc_info=True)
                 self.ui.pause()
+
+    def run_auto_flow(self):
+        """
+        Automatic startup flow:
+        1. Scan all sources (RSS + NewsData)
+        2. Filter with Claude
+        3. Show approval screen
+        """
+        self.ui.show_info("Otomatik akis baslatiliyor...")
+        logger.info("Starting automatic flow")
+
+        # Step 1: Scan and Filter
+        self.run_scan_and_filter_flow()
+
+        # Step 2: If there are pending approvals, show approval screen
+        pending = self.storage.get_pending_approvals()
+        if pending:
+            self.ui.clear()
+            self.ui.show_banner()
+            self.run_approval_flow()
+
+            # Step 3: If there are approved articles, ask about content generation
+            approved = self.storage.get_approved_articles()
+            if approved:
+                self.ui.clear()
+                if self.ui.confirm(f"{len(approved)} onaylanmis makale var. Icerik uretilsin mi?"):
+                    self.run_content_generation_flow()
+        else:
+            self.ui.show_info("Onay bekleyen makale yok.")
+
+        self.ui.pause()
+        self.ui.clear()
 
     def cleanup(self):
         """Cleanup resources on exit."""
