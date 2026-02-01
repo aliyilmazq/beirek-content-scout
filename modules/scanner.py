@@ -545,12 +545,14 @@ class NewsScanner:
             'articles_found': 0,
             'new_articles': 0,
             'duplicates_skipped': 0,
-            'errors': []
+            'errors': [],
+            'articles': []  # List of new articles for filtering
         }
 
         # Thread-safe counter for progress
         progress_lock = threading.Lock()
         progress_counter = [0]  # Use list for mutability in closure
+        all_new_articles = []  # Thread-safe list for new articles
 
         def process_source(source: Dict) -> Dict:
             """Process a single source (thread-safe)."""
@@ -559,7 +561,8 @@ class NewsScanner:
                 'articles_found': 0,
                 'new_articles': 0,
                 'duplicates': 0,
-                'error': None
+                'error': None,
+                'articles': []  # Articles added from this source
             }
 
             try:
@@ -587,6 +590,10 @@ class NewsScanner:
 
                     if article_id > 0:
                         source_result['new_articles'] += 1
+                        # Add to articles list for filtering
+                        article['id'] = article_id
+                        article['source_name'] = source['name']
+                        source_result['articles'].append(article)
 
             except Exception as e:
                 source_result['error'] = str(e)
@@ -611,6 +618,7 @@ class NewsScanner:
                     results['articles_found'] += source_result['articles_found']
                     results['new_articles'] += source_result['new_articles']
                     results['duplicates_skipped'] += source_result['duplicates']
+                    results['articles'].extend(source_result.get('articles', []))
                     if source_result['error']:
                         results['errors'].append(f"{source_result['source_name']}: {source_result['error']}")
         else:
@@ -621,6 +629,7 @@ class NewsScanner:
                 results['articles_found'] += source_result['articles_found']
                 results['new_articles'] += source_result['new_articles']
                 results['duplicates_skipped'] += source_result['duplicates']
+                results['articles'].extend(source_result.get('articles', []))
                 if source_result['error']:
                     results['errors'].append(f"{source_result['source_name']}: {source_result['error']}")
 
@@ -651,6 +660,11 @@ class NewsScanner:
                 if article_id > 0:
                     results['new_articles'] += 1
                     results['articles_found'] += 1
+                    # Add to articles list for filtering
+                    article['id'] = article_id
+                    if not article.get('source_name'):
+                        article['source_name'] = 'NewsData.io'
+                    results['articles'].append(article)
 
             logger.info(f"NewsData.io: Added {len(newsdata_articles)} potential articles")
 

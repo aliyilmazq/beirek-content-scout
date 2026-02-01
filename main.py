@@ -207,8 +207,9 @@ class ContentScout:
 
         # Filter with Claude
         relevant = []
-        if result['new_articles'] > 0:
-            self.ui.show_info("Makaleler filtreleniyor...")
+        scanned_articles = result.get('articles', [])
+        if scanned_articles:
+            self.ui.show_info(f"{len(scanned_articles)} makale filtreleniyor...")
 
             with self.ui.show_scan_progress(100) as progress:
                 task = progress.add_task("Filtreleniyor...", total=100)
@@ -216,7 +217,10 @@ class ContentScout:
                 def filter_progress(current, total):
                     progress.update(task, completed=int(current/total*100))
 
-                relevant = self.filter.filter_articles(progress_callback=filter_progress)
+                relevant = self.filter.filter_articles(
+                    articles=scanned_articles,
+                    progress_callback=filter_progress
+                )
 
             self.ui.show_success(f"{len(relevant)} ilgili makale bulundu")
 
