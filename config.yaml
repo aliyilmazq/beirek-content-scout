@@ -26,7 +26,7 @@ scanning:
 # Filtering settings
 filtering:
   min_relevance_score: 7
-  batch_size: 10
+  batch_size: 50  # Process all articles in one Claude call
 
 # Content generation settings
 content:
@@ -107,8 +107,8 @@ logging:
 
 # Claude CLI settings
 claude:
-  timeout_seconds: 180
-  max_retries: 3
+  timeout_seconds: 300  # 5 minutes for larger batches
+  max_retries: 2
 
 # NewsData.io API settings
 newsdata:
