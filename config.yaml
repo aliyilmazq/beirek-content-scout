@@ -114,7 +114,8 @@ claude:
 newsdata:
   api_key: "pub_68078bc44c9c4c47b399bd75538b164c"
   base_url: "https://newsdata.io/api/1"
-  # Combined query (single API call): energy OR ebrd OR epc OR epcm OR infrastructure
+  # Combined query (single API call):
+  # energy OR ebrd OR "world bank" OR ifc OR adb OR epc OR epcm OR infrastructure OR "project finance"
   # Language filter
   language: "en"
   # Countries (optional)

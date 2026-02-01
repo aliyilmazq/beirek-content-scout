@@ -266,8 +266,8 @@ class NewsDataClient:
             progress_callback(1, 1)
 
         # SINGLE API call - combined keywords
-        # NewsData uses OR logic with space-separated terms
-        combined_query = "energy OR ebrd OR epc OR epcm OR infrastructure"
+        # Includes: energy, development banks (EBRD, World Bank, IFC, ADB), EPC
+        combined_query = "energy OR ebrd OR \"world bank\" OR ifc OR adb OR epc OR epcm OR infrastructure OR \"project finance\""
 
         params = {
             'q': combined_query,
