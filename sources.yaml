@@ -83,7 +83,7 @@ sources:
   # SECONDARY SOURCES - Specialized topics
   # ===========================================================================
   secondary:
-    # --- Project Finance ---
+    # --- Project Finance & Development ---
     - name: "Infrastructure Investor"
       url: "https://www.infrastructureinvestor.com"
       rss_url: "https://www.infrastructureinvestor.com/feed/"
@@ -93,6 +93,18 @@ sources:
     - name: "Bloomberg NEF"
       url: "https://about.bnef.com"
       rss_url: "https://about.bnef.com/feed/"
+      category: "finance"
+      priority: 2
+
+    - name: "Development Finance"
+      url: "https://www.developmentfinance.com"
+      rss_url: "https://www.developmentfinance.com/feed/"
+      category: "finance"
+      priority: 2
+
+    - name: "Guardian Global Development"
+      url: "https://www.theguardian.com/global-development"
+      rss_url: "https://www.theguardian.com/global-development/rss"
       category: "finance"
       priority: 2
 
